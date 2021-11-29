@@ -5,7 +5,7 @@ module.exports = (req, res, next) => {
   const token = req.headers.authorization
 
   if(!token){
-    res.status(401).json("Can I haz token?")
+    res.status(401).json("Can I have token?")
   }else{
     jwt.verify(token,jwtSecret,(err,decoded)=>{
       if(err){

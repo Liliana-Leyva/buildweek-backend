@@ -3,7 +3,8 @@ const db = require("../../../data/config")
 module.exports= {
 	add,
     findBy,
-    find
+    find,
+    findById
 }
 
 function find() {
@@ -11,19 +12,20 @@ function find() {
     .select("u.id", "u.username", "u.email");
 }
 async function add(user) {
-    const [id] = await db("users").insert(user);
+    const [id] = await db("users")
+    .insert(user);
     return findById(id);
   }
   
-  function findBy(username) {
+  function findBy({username}) {
     return db("users as u")
-      .select("u.id", "u.username")
+      .select("u.id", "u.username","u.password")
       .where("u.username", username);
   }
   
   function findById(id) {
     return db("users as u")
-      .select("u.id", "u.username")
+      .select("u.id")
       .where("u.id", id)
       .first();
   }

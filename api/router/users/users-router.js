@@ -35,7 +35,7 @@ router.get("/api/users", async (req, res, next) => {
 	})
 })
 
-router.post("/api/register", checkCredentials, (req, res,next) =>{
+router.post("/api/register", (req, res,next) =>{
 	let user  = req.body;
   // bcrypting the password before saving
 	const rounds = process.env.BCRYPT_ROUNDS || 8; // 2 ^ 8
@@ -54,15 +54,17 @@ router.post("/api/register", checkCredentials, (req, res,next) =>{
         token
       });
     })
-    .catch(next); // our custom err handling middleware in server.js will trap this
+    .catch(next); 
 })
 
 
-router.post("/api/login",checkCredentials, async (req, res) => {
+router.post("/api/login", async (req, res, next) => {
 	let { username, password } = req.body;
 	try {
 	  const user = await Users.findBy({ username }).first();
-	  if (user && bcrypt.compareSync(password, user.password)) {
+	
+	  if(user && bcrypt.compareSync(password, user.password)) 
+	  {
 		const token = authenticateToken(user);
 		res.status(200).json({
 		  message: `Welcome back: ${user.username}!`,
@@ -75,6 +77,9 @@ router.post("/api/login",checkCredentials, async (req, res) => {
 	  console.log(error);
 	  res.status(500).json(error);
 	}
+
+	
+	
   });
 
 
